@@ -180,6 +180,8 @@ class WebClassScraper:
         for link in links:
             href = await link.get_attribute("href") or ""
             name = (await link.inner_text()).strip().splitlines()[0].replace("\xbb", "").strip()
+            if ')' in name:
+                name = name[:name.rfind(')') + 1]
             if href and name and href not in seen:
                 seen.add(href)
                 full = href if href.startswith("http") else WEBCLASS_BASE + href
@@ -197,6 +199,8 @@ class WebClassScraper:
         heading = await self.page.query_selector(".course-name, .navbar-brand a.course-name")
         if heading:
             course_name = (await heading.inner_text()).strip().splitlines()[0].strip()
+            if ')' in course_name:
+                course_name = course_name[:course_name.rfind(')') + 1]
 
         raw_items = await self.page.evaluate(_EXTRACT_JS)
 

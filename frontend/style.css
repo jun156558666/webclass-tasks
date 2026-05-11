@@ -171,6 +171,18 @@ main {
   text-align: center;
 }
 
+.expired-header {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: #f1f5f9;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin: 10px 0 6px;
+  letter-spacing: .3px;
+}
+
 /* ── Card ── */
 .card {
   border: 1px solid var(--border);

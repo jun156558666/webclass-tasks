@@ -115,13 +115,13 @@ class WebClassScraper:
     async def login(self) -> bool:
         try:
             logger.info("Navigating to hoppii login page...")
-            await self.page.goto(HOPPII_LOGIN_URL, wait_until="networkidle", timeout=30000)
+            await self.page.goto(HOPPII_LOGIN_URL, wait_until="domcontentloaded", timeout=30000)
             await self._ss("01_hoppii")
 
             await self.page.fill('input[name="j_username"]', USERNAME)
             await self.page.fill('input[name="j_password"]', PASSWORD)
             await self.page.click('button:text("ログイン"), input[type="submit"]')
-            await self.page.wait_for_load_state("networkidle", timeout=30000)
+            await self.page.wait_for_load_state("domcontentloaded", timeout=30000)
             await self._ss("02_after_login")
             logger.info(f"After login URL: {self.page.url}")
 
@@ -129,13 +129,13 @@ class WebClassScraper:
             login_link = await self.page.query_selector('a[href*="login/login.php"]')
             if login_link:
                 await login_link.click()
-                await self.page.wait_for_load_state("networkidle", timeout=30000)
+                await self.page.wait_for_load_state("domcontentloaded", timeout=30000)
                 await self._ss("03_after_portal_login")
                 logger.info(f"After portal login URL: {self.page.url}")
 
             # Navigate directly to SSO URL → auto-redirects into WebClass
             logger.info("Navigating via SSO URL...")
-            await self.page.goto(SSO_URL, wait_until="networkidle", timeout=30000)
+            await self.page.goto(SSO_URL, wait_until="domcontentloaded", timeout=30000)
             await self._ss("04_webclass_home")
             logger.info(f"WebClass URL: {self.page.url}")
 

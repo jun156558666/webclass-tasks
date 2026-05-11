@@ -134,17 +134,8 @@ function renderAssignments(assignments) {
     if (pending.length === 0) {
       pendingEl.innerHTML = '<div class="col-empty">なし</div>';
     } else {
-      const active  = pending.filter(a => !isExpired(a.deadline));
-      const expired = pending.filter(a =>  isExpired(a.deadline));
-
-      for (const a of active) pendingEl.appendChild(buildCard(a));
-
-      if (expired.length > 0) {
-        const sep = document.createElement('div');
-        sep.className = 'expired-header';
-        sep.textContent = `期限切れ (${expired.length}件)`;
-        pendingEl.appendChild(sep);
-        for (const a of expired) pendingEl.appendChild(buildCard(a));
+      for (const a of pending) {
+        pendingEl.appendChild(buildCard(a));
       }
     }
 
@@ -212,11 +203,6 @@ async function handleStatusChange(id, toSubmitted) {
     alert(`エラー: ${e.message}`);
     await loadAssignments();
   }
-}
-
-function isExpired(deadline) {
-  if (!deadline) return false;
-  return parseDeadline(deadline) < Date.now();
 }
 
 // ── Course sort ───────────────────────────────────────────────────────────────

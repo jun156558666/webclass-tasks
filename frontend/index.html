@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebClass 課題一覧</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <h1>📋 WebClass 課題一覧</h1>
+    <div class="header-right">
+      <div id="status-bar"></div>
+      <span id="last-updated">更新中...</span>
+      <button id="refresh-btn" onclick="manualRefresh()">🔄 今すぐ更新</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="assignment-list"></div>
+    <div id="empty-msg" class="hidden">
+      <p>🎉 課題はありません</p>
+    </div>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

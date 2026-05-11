@@ -1,0 +1,275 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --accent: #2563eb;
+  --accent-light: #eff6ff;
+  --urgent: #dc2626;
+  --urgent-light: #fef2f2;
+  --warn: #d97706;
+  --warn-light: #fffbeb;
+  --ok: #16a34a;
+  --ok-light: #f0fdf4;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: var(--shadow);
+}
+
+header h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#last-updated { font-size: .78rem; color: var(--text-muted); }
+
+#refresh-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 7px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: .82rem;
+  font-weight: 500;
+  transition: background .15s;
+}
+#refresh-btn:hover { background: #1d4ed8; }
+#refresh-btn:disabled { background: #93c5fd; cursor: default; }
+
+/* ── Status bar ── */
+#status-bar { min-height: 24px; }
+.status-msg {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .78rem;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--accent-light);
+  color: var(--accent);
+}
+.status-msg.error { background: var(--urgent-light); color: var(--urgent); }
+
+/* ── Main ── */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+/* ── Empty ── */
+.hidden { display: none; }
+#empty-msg {
+  text-align: center;
+  padding: 80px 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+/* ── Course block ── */
+.course-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.course-block-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border);
+}
+
+.course-block-name {
+  font-size: .82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--text-muted);
+  flex: 1;
+}
+
+.course-block-badges {
+  display: flex;
+  gap: 6px;
+}
+
+.badge {
+  font-size: .7rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 20px;
+}
+.badge-pending   { background: var(--urgent-light); color: var(--urgent); }
+.badge-submitted { background: var(--ok-light);     color: var(--ok); }
+
+/* ── Two-column inside each course ── */
+.course-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.course-col {
+  padding: 12px 14px;
+}
+.course-col + .course-col {
+  border-left: 1px solid var(--border);
+  background: #fafcff;
+}
+
+.course-col-header {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.col-empty {
+  font-size: .8rem;
+  color: #cbd5e1;
+  padding: 12px 0;
+  text-align: center;
+}
+
+/* ── Card ── */
+.card {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: var(--surface);
+  transition: border-left-color .2s;
+}
+.card:last-child { margin-bottom: 0; }
+.card.urgent      { border-left-color: var(--urgent); }
+.card.warning     { border-left-color: var(--warn); }
+.card.ok          { border-left-color: var(--ok); }
+.card.no-deadline { border-left-color: #cbd5e1; }
+.card.is-submitted {
+  border-left-color: var(--ok);
+  background: #f0fdf4;
+}
+
+.card-title {
+  font-size: .88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+.card-title a { color: var(--text); text-decoration: none; }
+.card-title a:hover { color: var(--accent); text-decoration: underline; }
+
+.card-deadline {
+  font-size: .76rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.deadline-badge {
+  padding: 1px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: .72rem;
+}
+.urgent      .deadline-badge { background: var(--urgent-light); color: var(--urgent); }
+.warning     .deadline-badge { background: var(--warn-light);   color: var(--warn); }
+.ok          .deadline-badge { background: var(--ok-light);     color: var(--ok); }
+.no-deadline .deadline-badge { background: #f1f5f9;             color: var(--text-muted); }
+.is-submitted .deadline-badge { background: var(--ok-light);    color: var(--ok); }
+
+.countdown { font-size: .72rem; color: var(--text-muted); }
+
+/* ── Radio toggle ── */
+.radio-group {
+  display: flex;
+  gap: 4px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-size: .75rem;
+  color: var(--text-muted);
+  background: var(--bg);
+  transition: all .12s;
+  user-select: none;
+}
+.radio-group input[type="radio"] { display: none; }
+
+.radio-group label.active-unsubmit {
+  background: var(--urgent-light);
+  border-color: var(--urgent);
+  color: var(--urgent);
+  font-weight: 600;
+}
+.radio-group label.active-submit {
+  background: var(--ok-light);
+  border-color: var(--ok);
+  color: var(--ok);
+  font-weight: 600;
+}
+.radio-group label:not(.active-unsubmit):not(.active-submit):hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+/* ── Spinner ── */
+.spinner {
+  width: 12px; height: 12px;
+  border: 2px solid #bfdbfe;
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

@@ -69,6 +69,12 @@ def init_db():
                 error      TEXT
             )
         """)
+        conn.cursor().execute(f"""
+            CREATE TABLE IF NOT EXISTS courses (
+                name       TEXT PRIMARY KEY,
+                scraped_at TEXT NOT NULL
+            )
+        """)
 
 
 def upsert_assignments(assignments: list[dict]):
@@ -119,6 +125,24 @@ def log_scrape(count: int, error: str | None = None):
             f"INSERT INTO scrape_log (scraped_at, count, error) VALUES ({PH},{PH},{PH})",
             (datetime.now().isoformat(), count, error),
         )
+
+
+def upsert_courses(names: list[str]):
+    now = datetime.now().isoformat()
+    with _conn() as conn:
+        cur = conn.cursor()
+        for name in names:
+            cur.execute(f"""
+                INSERT INTO courses (name, scraped_at) VALUES ({PH},{PH})
+                ON CONFLICT(name) DO UPDATE SET scraped_at = EXCLUDED.scraped_at
+            """, (name, now))
+
+
+def get_all_courses() -> list[str]:
+    with _conn() as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT name FROM courses ORDER BY name")
+        return [row[0] if not IS_POSTGRES else row["name"] for row in cur.fetchall()]
 
 
 def get_last_scrape() -> dict | None:

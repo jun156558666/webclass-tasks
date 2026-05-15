@@ -13,6 +13,8 @@ from backend.database import (
     get_all_assignments,
     set_submitted,
     upsert_assignments,
+    upsert_courses,
+    get_all_courses,
     log_scrape,
     get_last_scrape,
 )
@@ -36,6 +38,8 @@ async def background_refresh():
             assignments = await scraper.scrape()
             if assignments:
                 upsert_assignments(assignments)
+            if scraper.last_course_names:
+                upsert_courses(scraper.last_course_names)
             log_scrape(len(assignments), scraper.last_error)
             logger.info(f"Scrape complete: {len(assignments)} assignments")
         except Exception as e:
@@ -107,10 +111,17 @@ async def api_refresh():
         assignments = await scraper.scrape()
         if assignments:
             upsert_assignments(assignments)
+        if scraper.last_course_names:
+            upsert_courses(scraper.last_course_names)
         log_scrape(len(assignments), scraper.last_error)
         return {"ok": True, "count": len(assignments)}
     except Exception as e:
         raise HTTPException(500, str(e))
+
+
+@app.get("/api/courses")
+def api_courses():
+    return get_all_courses()
 
 
 # ------------------------------------------------------------------

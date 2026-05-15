@@ -68,6 +68,7 @@ class WebClassScraper:
         self.is_logged_in = False
         self.last_error: Optional[str] = None
         self.last_scraped_at: Optional[str] = None
+        self.last_course_names: list[str] = []
 
     async def start(self):
         DEBUG_DIR.mkdir(exist_ok=True)
@@ -160,6 +161,7 @@ class WebClassScraper:
 
         course_links = await self._find_courses()
         logger.info(f"Found {len(course_links)} courses")
+        self.last_course_names = [name for name, _ in course_links]
 
         for course_name, course_url in course_links:
             try:

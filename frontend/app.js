@@ -7,10 +7,14 @@ let countdownTimer = null;
 
 async function loadAssignments() {
   try {
-    const res = await fetch(`${API}/api/assignments`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    renderAssignments(data);
+    const [resA, resC] = await Promise.all([
+      fetch(`${API}/api/assignments`),
+      fetch(`${API}/api/courses`),
+    ]);
+    if (!resA.ok) throw new Error(`HTTP ${resA.status}`);
+    const assignments = await resA.json();
+    const courses = resC.ok ? await resC.json() : [];
+    renderAssignments(assignments, courses);
   } catch (e) {
     showStatus(`取得エラー: ${e.message}`, true);
   }
@@ -85,22 +89,26 @@ function formatCountdown(deadline) {
   return `(あと ${mins}分)`;
 }
 
-function renderAssignments(assignments) {
+function renderAssignments(assignments, courses = []) {
   const list    = document.getElementById('assignment-list');
   const emptyEl = document.getElementById('empty-msg');
   list.innerHTML = '';
 
-  if (!assignments.length) {
-    emptyEl.classList.remove('hidden');
-    return;
-  }
-  emptyEl.classList.add('hidden');
-
-  // 授業ごとにグループ化
+  // 授業ごとにグループ化（課題あり授業）
   const groups = {};
   for (const a of assignments) {
     (groups[a.course_name] ??= []).push(a);
   }
+  // 課題0件の授業も追加
+  for (const c of courses) {
+    if (!(c in groups)) groups[c] = [];
+  }
+
+  if (Object.keys(groups).length === 0) {
+    emptyEl.classList.remove('hidden');
+    return;
+  }
+  emptyEl.classList.add('hidden');
 
   for (const [course, items] of Object.entries(groups).sort(([a], [b]) => courseOrder(a) - courseOrder(b) || a.localeCompare(b, 'ja'))) {
     const pending   = items.filter(a => !a.submitted);

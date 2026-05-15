@@ -275,6 +275,49 @@ main {
   color: var(--text);
 }
 
+/* ── Responsive (mobile) ── */
+@media (max-width: 600px) {
+  header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+
+  header h1 { font-size: 1rem; }
+
+  .header-right {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #last-updated { font-size: .72rem; }
+
+  #refresh-btn {
+    padding: 6px 12px;
+    font-size: .78rem;
+  }
+
+  main {
+    padding: 12px 10px;
+  }
+
+  .course-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .course-col + .course-col {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    background: #fafcff;
+  }
+
+  .card-title {
+    font-size: .84rem;
+    white-space: normal;
+  }
+}
+
 /* ── Spinner ── */
 .spinner {
   width: 12px; height: 12px;
